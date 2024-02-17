@@ -1,4 +1,5 @@
 import customtkinter
+from analysis import getAllAnalysis
 
 from api.tweet import tweet
 
@@ -33,6 +34,8 @@ class App(customtkinter.CTk):
         self.csv_button.grid(row=1, column=0, padx=20, pady=10)
         self.api_button = customtkinter.CTkButton(self.sidebar_frame, text="API", command=self.api_button_event)
         self.api_button.grid(row=2, column=0, padx=20, pady=10)
+        self.all_analysis_button = customtkinter.CTkButton(self.sidebar_frame, text="All analysis", command=self.getAllAnalysis)
+        self.all_analysis_button.grid(row=3, column=0, padx=20, pady=10)
         self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
         self.appearance_mode_label.grid(row=5, column=0, padx=20, pady=(10, 0))
         self.appearance_mode_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["Light", "Dark", "System"],
@@ -47,13 +50,13 @@ class App(customtkinter.CTk):
          # create tabview
         self.tabview = customtkinter.CTkTabview(self, width=250)
         self.tabview.grid(row=0, column=1, padx=(20, 20), pady=(20, 20), columnspan=2, sticky="nsew")
-        self.tabview.add("CTkTabview")
-        self.tabview.tab("CTkTabview").grid_columnconfigure(0, weight=1) 
+        self.tabview.add("AnalysisTabview")
+        self.tabview.tab("AnalysisTabview").grid_columnconfigure(0, weight=1) 
 
-        self.textbox = customtkinter.CTkTextbox(self.tabview.tab("CTkTabview"), width=50)
+        self.textbox = customtkinter.CTkTextbox(self.tabview.tab("AnalysisTabview"), width=50)
         self.textbox.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
-        self.process_button = customtkinter.CTkButton(self.tabview.tab("CTkTabview"), text="Process Input", state="disabled",
+        self.process_button = customtkinter.CTkButton(self.tabview.tab("AnalysisTabview"), text="Process Input", state="disabled",
                                                       command=self.process_input)
         self.process_button.grid(row=1, column=0, padx=10, pady=(20, 10), sticky="ew")
 
@@ -109,3 +112,7 @@ class App(customtkinter.CTk):
     def change_scaling_event(self, new_scaling: str):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
         customtkinter.set_widget_scaling(new_scaling_float)
+
+    def getAllAnalysis(self):
+        print('get all anaylsis')
+        getAllAnalysis()
