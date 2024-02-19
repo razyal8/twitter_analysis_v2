@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
-
+import requests
+import logging
 # from api.tweet import tweet
 
 app = Flask(__name__)
@@ -26,10 +27,27 @@ def csv():
 @app.route('/api', methods=['GET'])
 def api():
     input_text = request.args.get('input_text', '')  # Get input text from query parameters
-    print(f'API Button Clicked with input text: {input_text}')
-    message = f'API Button Clicked with input text: {input_text}'
+    print('Started')
+    logging.info(f'API Button Clicked with input text: {input_text}')
+    # Define the payload for the POST request
+    # payload = input_text
+
+    # # Make a POST request to the Flask app service
+    # url = "http://tweet-service/tweet"
+    # response = requests.post(url, json=payload)
+    logging.info('here')
+    tweet_service_url = "http://10.111.84.87:3000"  # Use the ClusterIP and service port
+    tweet_service_endpoint = "/tweet"
+    response = requests.get(tweet_service_url + tweet_service_endpoint)
+
+    # Check the response
+    # if response.status_code == 200:
+    #     print("Request to Flask app service successful!")
+    #     print("Response:", response.text)
+    # else:
+    #     print("Error:", response.status_code)
     # newTweet = tweet(input_text)
-    return render_template('result.html', message=message)
+    return render_template('result.html', message=response)
 
 
 @app.route('/all-analysis')
