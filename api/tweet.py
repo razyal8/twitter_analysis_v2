@@ -1,9 +1,28 @@
-import requests
 from requests_oauthlib import OAuth1Session
-import os
-import json
+from flask import Flask, jsonify, request
+import logging
 
-def tweet(payload):
+app = Flask(__name__)
+
+health_status = True
+
+@app.route('/health')
+def health():
+    logging.info("im health?")
+    if health_status:
+        resp = jsonify(health="healthy")
+        resp.status_code = 200
+    else:
+        resp = jsonify(health="unhealthy")
+        resp.status_code = 500
+
+    return resp
+
+@app.route('/tweet', methods=['POST'])
+def tweet():
+    logging.info("i want to tweet please!")
+    payload = request.json.get('payload') 
+    print(payload)
     consumer_key = "xxyr0MzwRhBt6aH98g7GVWssE"
     consumer_secret = "GDCvubUkKour4cMwW63z08dE9ctGfZcVCxTjPPRLcP9Mzm9SCL"
     access_token = "1756283592768978945-YPz0POxt2s8AX9DUJzZJXP98hwQfdX"
@@ -58,3 +77,9 @@ def tweet(payload):
         )
 
     print("Tweet successful!")
+
+    return jsonify({'status': 'Tweet successful!'})
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=3000)

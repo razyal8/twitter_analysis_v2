@@ -1,27 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-deployment
+  name: tweet-deployment
 spec:
-  replicas: 1
+  replicas: 1 
   selector:
     matchLabels:
-      app: api
+      app: tweet
   template:
     metadata:
       labels:
-        app: api
+        app: tweet
     spec:
       containers:
-      - name: api
-        image: razyal/twitter-analysis-api:tag
-        ports:
-        - containerPort: 80
+      - name: tweet
+        image: razyal/mytweet:v7.0.0
         resources:
-            requests:
-              memory: "64Mi"
-              cpu: "250m"
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
-
+          requests:
+            memory: "256Mi"
+            cpu: "250m"     
+          limits:
+            memory: "512Mi"   
+            cpu: "500m"      
