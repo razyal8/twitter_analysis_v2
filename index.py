@@ -1,4 +1,4 @@
-from app import App
+from app.app import App
 from db import MongoDB
 from data_processing import insert_csv_to_mongodb
 
