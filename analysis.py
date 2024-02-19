@@ -135,3 +135,4 @@ def getAnalysisByInput(data):
     original_df = pd.DataFrame(result)
     original_df["date_time"] = pd.to_datetime(original_df["date_time"], dayfirst=True)
     print(original_df.info())
+
