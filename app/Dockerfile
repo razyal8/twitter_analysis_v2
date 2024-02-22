@@ -10,5 +10,7 @@ COPY . /app
 # Install any needed dependencies specified in requirements.txt
 RUN pip install flask requests
 
+EXPOSE 80
+
 # Run app.py when the container launches
 CMD ["python", "app.py"]

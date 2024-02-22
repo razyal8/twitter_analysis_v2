@@ -33,12 +33,10 @@ def api():
     # payload = input_text
 
     # # Make a POST request to the Flask app service
-    # url = "http://tweet-service/tweet"
-    # response = requests.post(url, json=payload)
-    logging.info('here')
-    tweet_service_url = "http://10.111.84.87:3000"  # Use the ClusterIP and service port
-    tweet_service_endpoint = "/tweet"
-    response = requests.get(tweet_service_url + tweet_service_endpoint)
+    # url = "http://tweet-service.tweet-project.svc.cluster.local:3000/health"
+    # tweet_service_url = "http://10.111.84.87:3000"  # Use the ClusterIP and service port
+    # tweet_service_endpoint = "/tweet"
+    # response = requests.get(tweet_service_url + tweet_service_endpoint)
 
     # Check the response
     # if response.status_code == 200:
@@ -47,7 +45,16 @@ def api():
     # else:
     #     print("Error:", response.status_code)
     # newTweet = tweet(input_text)
-    return render_template('result.html', message=response)
+    try:
+        print("also here")
+        logging.info('here')
+        url = "http://10.102.220.23:3000/health"
+        response = requests.get(url)
+        logging.info(response)
+        return render_template('result.html', message=response.json())
+    except Exception as e:
+        logging.error("Error occurred:", e)
+        return render_template('result.html', message=e)
 
 
 @app.route('/all-analysis')

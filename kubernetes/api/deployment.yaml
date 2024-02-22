@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tweet-deployment
+  namespace: tweet-project
 spec:
   replicas: 1 
   selector:
@@ -14,11 +15,27 @@ spec:
     spec:
       containers:
       - name: tweet
-        image: razyal/mytweet:v7.0.0
+        image: razyal/tweet:v1.0.0
         resources:
           requests:
             memory: "256Mi"
             cpu: "250m"     
           limits:
             memory: "512Mi"   
-            cpu: "500m"      
+            cpu: "500m"    
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tweet-service
+  namespace: tweet-project
+spec:
+  selector:
+    app: tweet
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
