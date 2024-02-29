@@ -1,10 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
 import requests
 import logging
-import pandas as pd
-import matplotlib.pyplot as plt
-from io import BytesIO
-import base64
+
+from database import perform_mongodb_operations
+
 # from api.tweet import tweet
 
 app = Flask(__name__)
@@ -64,29 +63,25 @@ def api():
 @app.route('/all-analysis')
 def all_analysis():
     try:
-        # Generate Pandas plots (replace this with your actual analytics data)
-        data = pd.DataFrame({'x': [1, 2, 3, 4, 5], 'y': [2, 4, 6, 8, 10]})
-        plots = []
-
-        # Generate plots dynamically and convert them to images
-        for column in data.columns:
-            plot = data.plot(x='x', y=column)
-            img = BytesIO()
-            plot.figure.savefig(img, format='png')
-            img.seek(0)
-            plot_url = base64.b64encode(img.getvalue()).decode()
-            plots.append(plot_url)
-
-        # Render the images in the result.html template
-        return render_template('result.html', plots=plots)
+        print("also here")
+        logging.info('here')
+        url = "http://10.102.220.23:3000/health"
+        response = requests.get(url)
+        logging.info(response)
+        return render_template('result.html', message=response.json())
     except Exception as e:
         return render_template('error.html', message=str(e))
 
 
 @app.route('/process_input', methods=['POST'])
 def process_input():
-    input_text = request.form['input_text']
-    return redirect(url_for('index', input_text=input_text))
+    try:
+        result = perform_mongodb_operations()
+
+        return render_template('result.html', message=result)
+    except Exception as e:
+        return render_template('error.html', message=str(e))
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
