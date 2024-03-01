@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics Data</title>
+    <title>Analysis Results</title>
 </head>
 <body>
-    <h1>Analytics Data</h1>
+    {% block content %}
+    <h1>All Analysis</h1>
     <div>
-        <!-- Display plot images dynamically -->
-        {% for plot_url in plots %}
-            <img src="data:image/png;base64,{{ plot_url }}" alt="Plot">
+        {% for plot_name, plot_data in plot_paths.items() %}
+            <h2>{{ plot_name }}</h2>
+            <!-- Decode and display Base64 encoded image data -->
+            <img src="data:image/png;base64,{{ plot_data }}" alt="{{ plot_name }}">
         {% endfor %}
     </div>
+    {% endblock %}
 </body>
 </html>

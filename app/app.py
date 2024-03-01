@@ -68,8 +68,14 @@ def all_analysis():
         logging.info('all-analysis')
         url = "http://10.100.90.191:9000/analysis"
         response = requests.get(url)
-        logging.info(response.json())
-        return render_template('result.html', message=response.json())
+        response.raise_for_status()
+        plot_paths = response.json()
+        logging.info(plot_paths)
+
+        return render_template('analysis.html', plot_paths=plot_paths)
+    except requests.RequestException as e:
+        logging.error("Request Error:", e)
+        return render_template('error.html', message="Error occurred while fetching data from the server.")
     except Exception as e:
         logging.error("Error occurred:", e)
         return render_template('error.html', message=str(e))
