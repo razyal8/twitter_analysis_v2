@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
 class MongoDB:
-    def __init__(self, uri='mongodb://mongodb:27017/', db_name='my_database'):
+    def __init__(self, uri='mongodb://mongodb:27017/', db_name='Tweets_Dataset'):
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
 
@@ -39,13 +39,6 @@ class MongoDB:
         collection = self.db[collection_name]
         result = collection.delete_many(query)
         return result.deleted_count
-
-    def count_documents(self, collection_name, query=None):
-        collection = self.db[collection_name]
-        if query:
-            return collection.count_documents(query)
-        else:
-            return collection.count_documents({})
 
     def close_connection(self):
         self.client.close()

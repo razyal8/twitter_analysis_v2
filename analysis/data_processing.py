@@ -1,11 +1,11 @@
 import logging
 import pandas as pd
 
-logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
+logging.basicConfig(level=logging.INFO) 
 
 def insert_csv_to_mongodb(csv_file, db, collection_name):
 
-    nRowsRead = 10 # specify 'None' if want to read whole file
+    nRowsRead = None
 
     df1 = pd.read_csv(csv_file, delimiter=',', nrows = nRowsRead)
     df1.dataframeName = 'tweets.csv'
