@@ -1,6 +1,6 @@
 from app.app import App
 from db import MongoDB
-from data_processing import insert_csv_to_mongodb
+from analysis.data_processing import insert_csv_to_mongodb
 
 def main():
     # Connect to MongoDB

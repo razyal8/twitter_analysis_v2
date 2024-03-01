@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for
 import requests
 import logging
 
+logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
+
 from database import perform_mongodb_operations
 
 # from api.tweet import tweet
@@ -63,13 +65,13 @@ def api():
 @app.route('/all-analysis')
 def all_analysis():
     try:
-        print("also here")
-        logging.info('here')
-        url = "http://10.102.220.23:3000/health"
+        logging.info('all-analysis')
+        url = "http://10.100.90.191:9000/analysis"
         response = requests.get(url)
-        logging.info(response)
+        logging.info(response.json())
         return render_template('result.html', message=response.json())
     except Exception as e:
+        logging.error("Error occurred:", e)
         return render_template('error.html', message=str(e))
 
 

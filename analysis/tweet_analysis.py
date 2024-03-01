@@ -1,12 +1,15 @@
+import logging
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-from db import MongoDB
+from database import MongoDB
 import nltk
 from nltk import sentiment
 from wordcloud import WordCloud
 nltk.download('vader_lexicon')
 analyzer = sentiment.SentimentIntensityAnalyzer()
+
+logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
 
 def plot_tweets_by_day_of_week(df):
@@ -112,14 +115,14 @@ def plot_sentiment_pie_chart(df):
     plt.show()
 
 
-def getAllAnalysis():
-    mongo = MongoDB()
+def getAllAnalysis(db):
+    
+    logging.info("connected to db")
 
-    result = mongo.find_many("tweetstest",{})
+    result = db.find_many("tweetstest",{})
     original_df = pd.DataFrame(result)
     original_df["date_time"] = pd.to_datetime(original_df["date_time"], dayfirst=True)
-    print(original_df.info())
-
+    
     plot_tweets_by_day_of_week(original_df)
     plot_tweets_by_hour_of_day(original_df)
     plot_likes_by_condition_if_content_has_substrings(original_df, "#", "http")
