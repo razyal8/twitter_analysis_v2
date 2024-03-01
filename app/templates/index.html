@@ -10,18 +10,19 @@
     <div class="container">
         <div class="main-content">
             <h2>Main Content</h2>
-            <form id="input-form" action="/process_input" method="post">
-                <textarea id="input-textbox" class="textbox" name="input_text" placeholder="Enter text here..."></textarea>
-                <button id="process-button" class="button" type="submit">Process Input</button>
-            </form>
-            <form id="csv-form" action="/csv" method="get">
-                <input type="hidden" name="input_text" id="csv-input_text" value=""> <!-- Hidden field to hold the input text -->
-                <button class="button" type="submit" onclick="updateInputText('csv')">CSV</button>
-            </form>
-            <form id="api-form" action="/api" method="get">
-                <input type="hidden" name="input_text" id="api-input_text" value=""> <!-- Hidden field to hold the input text -->
-                <button class="button" type="submit" onclick="updateInputText('api')">API</button>
-            </form>
+            <textarea id="input-textbox" class="textbox" name="input_text" placeholder="Enter text here..."></textarea>
+            <div class="button-container">
+                <form id="csv-form" action="/csv" method="get">
+                    <input type="hidden" name="input_text" id="csv-input_text" value=""> <!-- Hidden field to hold the input text -->
+                    <button class="button" type="submit" onclick="updateInputText('csv')">CSV</button>
+                </form>
+                <form id="api-form" action="/api" method="get">
+                    <input type="hidden" name="input_text" id="api-input_text" value=""> <!-- Hidden field to hold the input text -->
+                    <button class="button" type="submit" onclick="updateInputText('api')">API</button>
+                </form>
+            </div>
+            <br>
+            <br>
             <form id="all-analysis-form" action="/all-analysis">
                 <button class="button" type="submit" name="destination" value="all_analysis">All Analysis</button>
             </form>

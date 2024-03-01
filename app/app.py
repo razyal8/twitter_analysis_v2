@@ -3,11 +3,7 @@ import requests
 import logging
 import json
 
-logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
-
-from database import perform_mongodb_operations
-
-# from api.tweet import tweet
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
@@ -25,10 +21,22 @@ def index():
 
 @app.route('/csv', methods=['GET'])
 def csv():
-    input_text = request.args.get('input_text', '')  # Get input text from query parameters
-    print(f'CSV Button Clicked with input text: {input_text}')
-    message = f'CSV Button Clicked with input text: {input_text}'
-    return render_template('result.html', message=message)
+    try:
+        logging.info('some of the analysis')
+        input_text = request.args.get('input_text', '') 
+        logging.info(f'input for analysis {input_text}')
+
+        url = "http://10.100.90.191:9000/health"
+        response = requests.get(url)
+        response.raise_for_status()
+        plot_paths = response.json()
+        return render_template('analysis.html', plot_paths=plot_paths)
+    except requests.RequestException as e:
+        logging.error("Request Error:", e)
+        return render_template('error.html', message="Error occurred while fetching data from the server.")
+    except Exception as e:
+        logging.error("Error occurred:", e)
+        return render_template('error.html', message=str(e))
 
 @app.route('/api', methods=['GET'])
 def api():
@@ -59,8 +67,6 @@ def all_analysis():
         response = requests.get(url)
         response.raise_for_status()
         plot_paths = response.json()
-        logging.info(plot_paths)
-
         return render_template('analysis.html', plot_paths=plot_paths)
     except requests.RequestException as e:
         logging.error("Request Error:", e)
@@ -68,22 +74,6 @@ def all_analysis():
     except Exception as e:
         logging.error("Error occurred:", e)
         return render_template('error.html', message=str(e))
-
-
-@app.route('/process_input', methods=['POST'])
-def process_input():
-    try:
-        logging.info('all-analysis')
-        url = "http://tweet-service:3000/health"
-        response = requests.get(url)
-        response.raise_for_status()
-        plot_paths = response.json()
-        logging.info(plot_paths)
-
-        return render_template('result.html', plot_paths=plot_paths)
-    except Exception as e:
-        return render_template('result.html', message=e)
-    
-
+ 
 if __name__ == '__main__':
     app.run(debug=True)

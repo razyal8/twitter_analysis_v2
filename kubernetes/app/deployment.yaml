@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: razyal/myapp:v22.0.0
+        image: razyal/myapp:v4.0.0
         ports:
         - containerPort: 5000
         resources:
