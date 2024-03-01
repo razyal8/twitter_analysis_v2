@@ -11,7 +11,7 @@
 }
 
 .plot-item {
-    width: calc(33.33% - 20px); /* Adjust width based on number of plots per row */
+    width: calc(33.33% - 20px);
     margin-bottom: 20px;
 }
 
@@ -21,5 +21,5 @@
 }
 
 .plot-name {
-    font-size: 16px; /* Adjust font size as needed */
+    font-size: 16px;
 }

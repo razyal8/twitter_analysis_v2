@@ -13,7 +13,6 @@
             {% for plot_name, plot_data in plot_paths.items() %}
                 <div class="plot-item">
                     <h2 class="plot-name">{{ plot_name }}</h2>
-                    <!-- Decode and display Base64 encoded image data -->
                     <img src="data:image/png;base64,{{ plot_data }}" alt="{{ plot_name }}">
                 </div>
             {% endfor %}

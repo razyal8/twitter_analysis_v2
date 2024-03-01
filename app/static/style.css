@@ -6,27 +6,27 @@ body {
 
 .container {
     display: flex;
-    justify-content: center; /* Center the content horizontally */
-    align-items: center; /* Center the content vertically */
-    height: 100vh; /* Make the container full height of the viewport */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .main-content {
     width: 80%;
-    max-width: 600px; /* Limit the width of the content */
+    max-width: 600px;
     padding: 20px;
-    text-align: center; /* Center the content inside the container */
+    text-align: center;
 }
 
 .button-container {
     margin-top: 20px;
-    display: flex; /* Use flexbox to align buttons horizontally */
-    justify-content: center; /* Center the buttons horizontally */
+    display: flex;
+    justify-content: center; 
 }
 
 .button {
     padding: 10px 20px;
-    margin: 0 10px; /* Add some spacing between buttons */
+    margin: 0 10px;
     background-color: #007bff;
     color: #fff;
     border: none;

@@ -26,7 +26,7 @@ def csv():
         input_text = request.args.get('input_text', '') 
         logging.info(f'input for analysis {input_text}')
 
-        url = "http://10.100.90.191:9000/health"
+        url = f'http://analysis-service:9000/analysis-by-input?input_text={input_text}'
         response = requests.get(url)
         response.raise_for_status()
         plot_paths = response.json()
@@ -63,7 +63,7 @@ def api():
 def all_analysis():
     try:
         logging.info('all-analysis')
-        url = "http://10.100.90.191:9000/analysis"
+        url = "http://analysis-service:9000/analysis"
         response = requests.get(url)
         response.raise_for_status()
         plot_paths = response.json()
