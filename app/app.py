@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
-import requests
-import logging
 import json
+import logging
+import requests
+
+from flask import Flask, render_template, request, redirect, url_for
 
 logging.basicConfig(level=logging.INFO)
 
@@ -12,7 +13,7 @@ def index():
     if request.method == 'POST':
         destination = request.form['destination']
         print(f'{destination.capitalize()} Button Clicked')
-        if destination in ['csv', 'api']:  # If destination is csv or api, redirect to respective route
+        if destination in ['csv', 'api']:
             input_text = request.form['input_text']
             return redirect(url_for(destination, input_text=input_text))
         else:
@@ -22,10 +23,9 @@ def index():
 @app.route('/csv', methods=['GET'])
 def csv():
     try:
-        logging.info('some of the analysis')
+        logging.info(f'Get analysis from the csv')
         input_text = request.args.get('input_text', '') 
         logging.info(f'input for analysis {input_text}')
-
         url = f'http://analysis-service:9000/analysis-by-input?input_text={input_text}'
         response = requests.get(url)
         response.raise_for_status()
@@ -40,15 +40,12 @@ def csv():
 
 @app.route('/api', methods=['GET'])
 def api():
-    input_text = request.args.get('input_text', '')  # Get input text from query parameters
-    print('Started')
-    logging.info(f'API Button Clicked with input text: {input_text}')
+    input_text = request.args.get('input_text', '')
+    logging.info(f'Make a tweet {input_text} using tweetet API')
     payload = {"payload": input_text}
-    headers = {"Content-Type": "application/json"}  # Specify JSON content type
+    headers = {"Content-Type": "application/json"}
 
-    # Make a POST request to the Flask app service   
     try:
-        logging.info(f'make request {payload}')
         url = "http://tweet-service:3000/tweet"
         response = requests.post(url, data=json.dumps(payload), headers=headers)
         logging.info("Request to Flask app service successful!")
@@ -58,11 +55,10 @@ def api():
         logging.error("Error occurred:", e)
         return render_template('result.html', message=e)
 
-
 @app.route('/all-analysis')
 def all_analysis():
     try:
-        logging.info('all-analysis')
+        logging.info('Get all-analysis from the csv')
         url = "http://analysis-service:9000/analysis"
         response = requests.get(url)
         response.raise_for_status()
