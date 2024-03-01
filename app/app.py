@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import requests
 import logging
+import json
 
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
@@ -34,27 +35,15 @@ def api():
     input_text = request.args.get('input_text', '')  # Get input text from query parameters
     print('Started')
     logging.info(f'API Button Clicked with input text: {input_text}')
-    # Define the payload for the POST request
-    # payload = input_text
+    payload = {"payload": input_text}
+    headers = {"Content-Type": "application/json"}  # Specify JSON content type
 
-    # # Make a POST request to the Flask app service
-    # url = "http://tweet-service.tweet-project.svc.cluster.local:3000/health"
-    # tweet_service_url = "http://10.111.84.87:3000"  # Use the ClusterIP and service port
-    # tweet_service_endpoint = "/tweet"
-    # response = requests.get(tweet_service_url + tweet_service_endpoint)
-
-    # Check the response
-    # if response.status_code == 200:
-    #     print("Request to Flask app service successful!")
-    #     print("Response:", response.text)
-    # else:
-    #     print("Error:", response.status_code)
-    # newTweet = tweet(input_text)
+    # Make a POST request to the Flask app service   
     try:
-        print("also here")
-        logging.info('here')
-        url = "http://10.102.220.23:3000/health"
-        response = requests.get(url)
+        logging.info(f'make request {payload}')
+        url = "http://tweet-service:3000/tweet"
+        response = requests.post(url, data=json.dumps(payload), headers=headers)
+        logging.info("Request to Flask app service successful!")
         logging.info(response)
         return render_template('result.html', message=response.json())
     except Exception as e:
@@ -84,11 +73,16 @@ def all_analysis():
 @app.route('/process_input', methods=['POST'])
 def process_input():
     try:
-        result = perform_mongodb_operations()
+        logging.info('all-analysis')
+        url = "http://tweet-service:3000/health"
+        response = requests.get(url)
+        response.raise_for_status()
+        plot_paths = response.json()
+        logging.info(plot_paths)
 
-        return render_template('result.html', message=result)
+        return render_template('result.html', plot_paths=plot_paths)
     except Exception as e:
-        return render_template('error.html', message=str(e))
+        return render_template('result.html', message=e)
     
 
 if __name__ == '__main__':
