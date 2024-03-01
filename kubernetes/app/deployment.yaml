@@ -4,7 +4,7 @@ metadata:
   name: myapp-deployment
   namespace: tweet-project
 spec:
-  replicas: 3   # Adjust the number of replicas based on your requirements
+  replicas: 3
   selector:
     matchLabels:
       app: myapp
@@ -15,28 +15,13 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: razyal/myapp:v4.0.0
+        image: razyal/myapp:v1.0.0
         ports:
         - containerPort: 5000
         resources:
           requests:
-            memory: "256Mi"   # Adjust memory request based on your application's requirements
-            cpu: "250m"       # Adjust CPU request based on your application's requirements
+            memory: "256Mi"  
+            cpu: "250m" 
           limits:
-            memory: "512Mi"   # Adjust memory limit based on your application's requirements
-            cpu: "500m"       # Adjust CPU limit based on your application's requirements
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: myapp-service
-  namespace: tweet-project
-spec:
-  selector:
-    app: myapp
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 5000
-  type: LoadBalancer   # Specify the service type as LoadBalancer
+            memory: "512Mi"
+            cpu: "500m" 

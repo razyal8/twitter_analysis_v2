@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: analysis
-        image: razyal/analysis:v11.0.0
+        image: razyal/analysis:v1.0.0
         resources:
           requests:
             memory: "256Mi"
