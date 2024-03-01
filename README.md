@@ -186,3 +186,133 @@ The `app.py` script contains the Flask application logic for handling requests a
 
 This project is licensed under the [MIT License](LICENSE).
 
+
+---------------------------------------------------
+
+# Kubernetes Folder
+
+This folder contains Kubernetes configuration files for deploying the Tweet Project application.
+
+## Folder Structure
+
+- **namespace.yaml**: Defines a Kubernetes namespace for the project.
+
+### Analysis Folder
+
+- **deployment.yaml**: Defines a Kubernetes deployment for the analysis service.
+- **service.yaml**: Defines a Kubernetes service for the analysis service.
+
+### API Folder
+
+- **deployment.yaml**: Defines a Kubernetes deployment for the API service.
+- **service.yaml**: Defines a Kubernetes service for the API service.
+
+### App Folder
+
+- **deployment.yaml**: Defines a Kubernetes deployment for the main application.
+- **service.yaml**: Defines a Kubernetes service for the main application.
+
+### DB Folder
+
+- **mongodb-statefulset.yaml**: Defines a Kubernetes StatefulSet for the MongoDB database.
+- **mongodb-secret.yaml**: Defines a Kubernetes secret for MongoDB credentials.
+- **mongodb-service.yaml**: Defines a Kubernetes service for the MongoDB database.
+
+## Usage
+
+To deploy the Tweet Project application on Kubernetes, follow these steps:
+
+1. Apply the namespace configuration:
+
+kubectl apply -f namespace.yaml
+
+
+2. Apply the configurations for each component:
+
+markdown
+
+# Kubernetes Folder
+
+This folder contains Kubernetes configuration files for deploying the Tweet Project application.
+
+## Folder Structure
+
+- **namespace.yaml**: Defines a Kubernetes namespace for the project.
+
+### Analysis Folder
+
+- **deployment.yaml**: Defines a Kubernetes deployment for the analysis service.
+- **service.yaml**: Defines a Kubernetes service for the analysis service.
+
+### API Folder
+
+- **deployment.yaml**: Defines a Kubernetes deployment for the API service.
+- **service.yaml**: Defines a Kubernetes service for the API service.
+
+### App Folder
+
+- **deployment.yaml**: Defines a Kubernetes deployment for the main application.
+- **service.yaml**: Defines a Kubernetes service for the main application.
+
+### DB Folder
+
+- **mongodb-statefulset.yaml**: Defines a Kubernetes StatefulSet for the MongoDB database.
+- **mongodb-secret.yaml**: Defines a Kubernetes secret for MongoDB credentials.
+- **mongodb-service.yaml**: Defines a Kubernetes service for the MongoDB database.
+
+## Usage
+
+To deploy the Tweet Project application on Kubernetes, follow these steps:
+
+1. Apply the namespace configuration:
+
+kubectl apply -f namespace.yaml
+
+markdown
+
+
+2. Apply the configurations for each component:
+
+kubectl apply -f analysis/deployment.yaml
+kubectl apply -f analysis/service.yaml
+
+kubectl apply -f api/deployment.yaml
+kubectl apply -f api/service.yaml
+
+kubectl apply -f app/deployment.yaml
+kubectl apply -f app/service.yaml
+
+kubectl apply -f db/mongodb-statefulset.yaml
+kubectl apply -f db/mongodb-secret.yaml
+kubectl apply -f db/mongodb-service.yaml
+
+
+3. Monitor the deployment:
+
+kubectl get pods -n tweet-project
+
+
+4. Access the application using the appropriate service endpoints.
+
+## Configuration Details
+
+- **Analysis Deployment**: Deploys the analysis service with resource limits and requests.
+- **Analysis Service**: Exposes the analysis service on port 9000 within the cluster.
+
+- **API Deployment**: Deploys the API service with resource limits and requests.
+- **API Service**: Exposes the API service on port 3000 within the cluster.
+
+- **App Deployment**: Deploys the main application with resource limits and requests.
+- **App Service**: Exposes the main application on port 80 within the cluster using a LoadBalancer type service.
+
+- **MongoDB StatefulSet**: Deploys MongoDB as a StatefulSet with persistent volume claims.
+- **MongoDB Secret**: Stores MongoDB credentials as a Kubernetes secret.
+- **MongoDB Service**: Exposes MongoDB on port 27017 within the cluster.
+
+## Namespace
+
+The project components are deployed within the `tweet-project` namespace to isolate them from other resources.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
