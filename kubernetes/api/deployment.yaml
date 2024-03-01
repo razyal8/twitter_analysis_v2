@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tweet-deployment
+  namespace: tweet-project
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: tweet
+  template:
+    metadata:
+      labels:
+        app: tweet
+    spec:
+      containers:
+      - name: tweet
+        image: razyal/tweet:v1.0.0
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"     
+          limits:
+            memory: "512Mi"   
+            cpu: "500m"

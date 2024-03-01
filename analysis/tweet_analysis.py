@@ -1,13 +1,15 @@
+import nltk
+import base64
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
-from db import MongoDB
-import nltk
+
+from io import BytesIO
 from nltk import sentiment
 from wordcloud import WordCloud
+from matplotlib import pyplot as plt
+
 nltk.download('vader_lexicon')
 analyzer = sentiment.SentimentIntensityAnalyzer()
-
 
 def plot_tweets_by_day_of_week(df):
     df["day_of_week"] = df["date_time"].dt.dayofweek
@@ -16,7 +18,13 @@ def plot_tweets_by_day_of_week(df):
     plt.xlabel("Day of Week")
     plt.ylabel("Number of Tweets")
     plt.xticks(range(7), ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], rotation=45)
-    plt.show()
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plot_data = base64.b64encode(buffer.getvalue()).decode()
+    plt.close()
+    return "tweets_by_day_of_week", plot_data
+
 
 def plot_tweets_by_hour_of_day(df):
     df["hour_of_day"] = df["date_time"].dt.hour
@@ -24,7 +32,12 @@ def plot_tweets_by_hour_of_day(df):
     plt.title("Tweets by Hour of Day (UTC)")
     plt.xlabel("Hour of Day")
     plt.ylabel("Number of Tweets")
-    plt.show()
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plot_data = base64.b64encode(buffer.getvalue()).decode()
+    plt.close()
+    return "plot_tweets_by_hour_of_day", plot_data
 
 
 def plot_likes_by_condition_if_content_has_substrings(df, substring1: str, substring2: str):
@@ -39,7 +52,12 @@ def plot_likes_by_condition_if_content_has_substrings(df, substring1: str, subst
     plt.title("Average Likes by Condition")
     plt.xticks([0, 1], [f"Doesn't Contain '{substring2}'", f"Contains '{substring2}'"])
     plt.yticks([0, 1], [f"Doesn't Contain '{substring1}'", f"Contains '{substring1}'"])
-    plt.show()
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plot_data = base64.b64encode(buffer.getvalue()).decode()
+    plt.close()
+    return "plot_likes_by_condition_if_content_has_substrings", plot_data
 
 
 def plot_likes_by_average_sentiment_per_user(df):
@@ -61,7 +79,12 @@ def plot_likes_by_average_sentiment_per_user(df):
     plt.xlabel("Average Sentiment")
     plt.ylabel("Average Number of Likes")
     plt.title("Average Likes by Average Sentiment")
-    plt.show()
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plot_data = base64.b64encode(buffer.getvalue()).decode()
+    plt.close()
+    return "plot_likes_by_average_sentiment_per_user", plot_data
 
 
 def plot_likes_by_average_tweet_rate_per_user(df):
@@ -84,7 +107,12 @@ def plot_likes_by_average_tweet_rate_per_user(df):
     plt.xlabel("Average Tweet Rate")
     plt.ylabel("Average Number of Likes")
     plt.title("Average Likes by Average Tweet Rate")
-    plt.show()
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plot_data = base64.b64encode(buffer.getvalue()).decode()
+    plt.close()
+    return "plot_likes_by_average_tweet_rate_per_user", plot_data
 
 
 def plot_word_cloud(df):
@@ -92,7 +120,12 @@ def plot_word_cloud(df):
     wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text)
     plt.imshow(wordcloud)
     plt.axis("off")
-    plt.show()
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plot_data = base64.b64encode(buffer.getvalue()).decode()
+    plt.close()
+    return "plot_word_cloud", plot_data
 
 
 def plot_sentiment_pie_chart(df):
@@ -109,29 +142,38 @@ def plot_sentiment_pie_chart(df):
 
     df['sentiment'].value_counts().plot(kind="pie", autopct="%1.1f%%")
     plt.title("Sentiment Distribution")
-    plt.show()
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plot_data = base64.b64encode(buffer.getvalue()).decode()
+    plt.close()
+    return "plot_sentiment_pie_chart", plot_data
 
 
-def getAllAnalysis():
-    mongo = MongoDB()
-
-    result = mongo.find_many("tweetstest",{})
-    original_df = pd.DataFrame(result)
+def generate_analysis(dataset):
+    original_df = pd.DataFrame(dataset)
     original_df["date_time"] = pd.to_datetime(original_df["date_time"], dayfirst=True)
-    print(original_df.info())
-
-    plot_tweets_by_day_of_week(original_df)
-    plot_tweets_by_hour_of_day(original_df)
-    plot_likes_by_condition_if_content_has_substrings(original_df, "#", "http")
-    plot_likes_by_average_sentiment_per_user(original_df)
-    plot_likes_by_average_tweet_rate_per_user(original_df)
-    plot_word_cloud(original_df)
-    plot_sentiment_pie_chart(original_df)
-
     
-def getAnalysisByInput(data):
-    mongo = MongoDB()
-    result = mongo.find_many("tweetstest",{data})
-    original_df = pd.DataFrame(result)
-    original_df["date_time"] = pd.to_datetime(original_df["date_time"], dayfirst=True)
-    print(original_df.info())
+    # Generate plots
+    plots = [
+        plot_tweets_by_day_of_week(original_df),
+        plot_tweets_by_hour_of_day(original_df),
+        plot_likes_by_condition_if_content_has_substrings(original_df, "#", "http"),
+        plot_likes_by_average_sentiment_per_user(original_df),
+        plot_likes_by_average_tweet_rate_per_user(original_df),
+        plot_word_cloud(original_df),
+        plot_sentiment_pie_chart(original_df),
+    ]
+
+    return {name: data for name, data in plots}
+
+def getAllAnalysis(db):
+    dataset = db.find_many("tweets",{})
+    result = generate_analysis(dataset)
+    return result
+
+def getAnalysisByInput(data, db):
+    dataset = db.find_many("tweets",{ "author" : data})
+    result = generate_analysis(dataset)
+    return result
+

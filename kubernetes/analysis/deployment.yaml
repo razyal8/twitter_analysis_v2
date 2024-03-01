@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analysis-deployment
+  namespace: tweet-project
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: analysis
+  template:
+    metadata:
+      labels:
+        app: analysis
+    spec:
+      containers:
+      - name: analysis
+        image: razyal/analysis:v1.0.0
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"     
+          limits:
+            memory: "512Mi"   
+            cpu: "500m"    
