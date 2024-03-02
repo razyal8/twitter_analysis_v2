@@ -1,11 +1,108 @@
-# twitter_analysis_v2
+
+# Twitter_analysis_v2
+
 Final Project - Twitter Insight Engine using Kubernetes
 
-# Folder Analysis
+The Tweet Analysis Web Application is a Flask-based web application that allows users to perform various analyses on tweet data. Users can input data, choose analysis options, and visualize the results.
+
+
+
+## Roadmap
+- [Environment Variables](#environment-variables)
+- [run locally](#run-locally)
+- [Deployment](#deployment)
+- [services](#services)
+  - [Analysis Folder](#analysis)
+  - [Api Folder](#api)
+  - [App Folder](#app)
+- [Kubernetes](#kubernetes)
+
+# Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`CONSUMER_KEY`
+
+`CONSUMER_SECRET`
+
+`ACCESS_TOKEN`
+
+`ACCESS_TOKEN_SECRET`
+
+`BEARER_TOKEN`
+
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone git@github.com:razyal8/twitter_analysis_v2.git
+
+  git clone https://github.com/razyal8/twitter_analysis_v2.git
+```
+
+Go to the project directory
+
+```bash
+  cd twitter_analysis_v2
+```
+
+
+## Deployment
+
+To deploy this project run
+
+
+#### Deploy db
+
+```bash
+  kubectl apply -f kubernetes/db/security.yaml
+
+  kubectl apply -f kubernetes/db/deployment.yaml
+
+  kubectl apply -f kubernetes/db/service.yaml
+```
+
+#### Deploy Api service
+
+```bash
+  kubectl apply -f kubernetes/api/deployment.yaml
+
+  kubectl apply -f kubernetes/api/service.yaml
+```
+
+#### Deploy analysis service
+
+```bash  
+  kubectl apply -f kubernetes/analysis/deployment.yaml
+
+  kubectl apply -f kubernetes/analysis/service.yaml
+```
+
+#### Deploy App service
+
+```bash
+  kubectl apply -f kubernetes/app/deployment.yaml
+
+  kubectl apply -f kubernetes/app/service.yaml
+```
+
+#### RUN local
+```bash
+  kubectl port-forward -n tweet-project service/myapp-service 5000:80
+```
+
+### localhost:5000
+
+
+# services
+
+## Analysis
 
 This repository contains scripts for analyzing Twitter data stored in MongoDB. The analysis includes various visualizations and insights derived from the tweet data.
 
-## Folder Structure
+### 📁 Folder Structure
 
 - **data/**: Contains Excel files with tweet data.
 - **analysis/**: Contains scripts for data processing, analysis, and visualization.
@@ -15,7 +112,13 @@ This repository contains scripts for analyzing Twitter data stored in MongoDB. T
 - **tweet_analysis.py**: Script for performing tweet analysis.
 - **README.md**: This file, providing an overview of the repository.
 
-## Setup and Dependencies
+
+💻 Data Processing and Analysis
+
+    The data_processing.py script contains functions for processing tweet data and inserting it into MongoDB.
+    The tweet_analysis.py script contains functions for performing various analyses on tweet data, including plotting tweets by day of the week, hour of the day, sentiment analysis, word clouds, etc.
+
+### 🛠️ Setup and Dependencies
 
 To run the scripts in this repository, you need to have the following dependencies installed:
 
@@ -27,71 +130,48 @@ To run the scripts in this repository, you need to have the following dependenci
 - Matplotlib
 - WordCloud
 
-You can install the dependencies using pip:
-pip install pandas pymongo Flask nltk matplotlib wordcloud
+### 🚀 Usage
 
+    1. Ensure that you have MongoDB running.
+    2. Place your tweet data in the data/ directory.
 
-Additionally, you need to download the NLTK data. Run Python and execute the following commands:
+Once the server is running, you can access the following endpoints:
 
-```python
-import nltk
-nltk.download('vader_lexicon')
+    /health: Check the health status of the server.
+    /analysis: Get all analysis of tweet data.
+    /analysis-by-input?input_text=<author_name>: Get analysis for tweets by a specific author.
+
+### 📚 API Reference
+
+#### Get all analysis
+
+```http
+  GET /analysis
 ```
 
-Usage
+#### Get analysis by input
 
-    Ensure that you have MongoDB running.
-    Place your tweet data in the data/ directory.
-    Run the Flask server using the following command:
+```http
+  GET /analysis-by-input
+```
 
-python server.py
-
-    Once the server is running, you can access the following endpoints:
-        /health: Check the health status of the server.
-        /analysis: Get all analysis of tweet data.
-        /analysis-by-input?input_text=<author_name>: Get analysis for tweets by a specific author.
-
-Data Processing and Analysis
-
-    The data_processing.py script contains functions for processing tweet data and inserting it into MongoDB.
-    The tweet_analysis.py script contains functions for performing various analyses on tweet data, including plotting tweets by day of the week, hour of the day, sentiment analysis, word clouds, etc.
-
-Docker
-
-A Dockerfile is provided for containerizing the application. You can build the Docker image using the following command:
-
-docker build -t tweet-analysis .
-
-You can then run the Docker container using:
-
-docker run -p 9000:9000 tweet-analysis
+| Parameter    |  Type     | Description          |
+| :--------    | :-------  | :--------------------|
+| `input_text` | `string`  | **Required**.        |
 
 
-# API Folder
+
+
+# API
 
 This folder contains scripts for a Flask API that interacts with Twitter's API to post tweets.
 
-## Folder Structure
+### 📁 Folder Structure
 
 - **dockerfile**: Dockerfile for containerizing the API.
 - **tweet.py**: Flask server script to handle tweet requests.
 
-## Usage
-
-To run the Flask API, you can use Docker. Make sure you have Docker installed on your system.
-
-1. Navigate to the `api/` directory.
-2. Build the Docker image using the following command:
-
-docker build -t tweet-api .
-
-
-3. Once the image is built, you can run the Docker container using:
-
-
-4. The Flask server will be accessible at `http://localhost:3000`.
-
-## Dependencies
+### 🛠️ Setup and Dependencies
 
 The API requires the following Python packages:
 
@@ -101,53 +181,62 @@ The API requires the following Python packages:
 
 These dependencies are installed automatically when building the Docker image.
 
-## Endpoints
+### 🚀 Usage
 
-The API exposes the following endpoints:
+To run the Flask API, you can use Docker. Make sure you have Docker installed on your system.
 
-- `/health`: Check the health status of the API.
-- `/tweet`: Make a tweet request by providing the tweet content in the request payload.
+    1. Navigate to the `api/` directory.
+    2. Build the Docker image using the following command:
+
+
+    3. Once the image is built, you can run the Docker container using:
+
+
+    4. The Flask server will be accessible at `http://localhost:3000`.
+
+### 📚 API Reference
+
+#### Get health - Check the health status of the API.
+
+```http
+  GET /health
+```
+
+#### Post tweet - Make a tweet request by providing the tweet content in the request payload.
+
+```http
+  POST /tweet
+```
+
+| Parameter  |  Type     | Description          |
+| :--------  | :-------  | :--------------------|
+| `payload`  | `object`  | **Required**.        |
+
 
 ## Authorization
 
 The API uses OAuth1 authentication to interact with the Twitter API. You need to provide your Twitter API credentials in the `tweet.py` script:
 
-- Consumer Key (`consumer_key`)
-- Consumer Secret (`consumer_secret`)
-- Access Token (`access_token`)
-- Access Token Secret (`access_token_secret`)
+- Consumer Key (`CONSUMER_KEY`)
+- Consumer Secret (`CONSUMER_SECRET`)
+- Access Token (`ACCESS_TOKEN`)
+- Access Token Secret (`ACCESS_TOKEN_SECRET`)
 
 Make sure to keep your credentials secure and avoid exposing them publicly.
 
 
-# App Folder
+# App
 
 This folder contains a Flask application for interacting with other services and rendering HTML templates.
 
-## Folder Structure
+### 📁 Folder Structure
 
 - **static/**: Contains CSS files for styling the HTML templates.
 - **templates/**: Contains HTML templates for rendering the web pages.
 - **app.py**: Flask server script to handle requests and render templates.
 - **Dockerfile**: Dockerfile for containerizing the Flask application.
 
-## Usage
-
-To run the Flask application, follow these steps:
-
-1. Ensure that you have all the necessary dependencies installed.
-2. Navigate to the `app/` directory.
-3. Build the Docker image using the following command:
-
-docker build -t flask-app .
-
-
-4. Once the image is built, you can run the Docker container using:
-
-
-5. The Flask application will be accessible at `http://localhost:5000`.
-
-## Dependencies
+### 🛠️ Setup and Dependencies
 
 The Flask application requires the following Python packages:
 
@@ -155,6 +244,20 @@ The Flask application requires the following Python packages:
 - requests
 
 These dependencies are installed automatically when building the Docker image.
+
+### 🚀 Usage
+
+To run the Flask application, follow these steps:
+
+    1. Ensure that you have all the necessary dependencies installed.
+    2. Navigate to the `app/` directory.
+    3. Build the Docker image using the following command:
+
+    docker build -t flask-app .
+    
+    4. Once the image is built, you can run the Docker container using:
+    5. The Flask application will be accessible at `http://localhost:5000`.
+
 
 ## Endpoints
 
@@ -182,18 +285,14 @@ The `static/` directory contains CSS files for styling the HTML templates.
 
 The `app.py` script contains the Flask application logic for handling requests and rendering templates.
 
-## License
 
-This project is licensed under the [MIT License](LICENSE).
+----------------------------------------------------------------------
 
-
----------------------------------------------------
-
-# Kubernetes Folder
+# Kubernetes
 
 This folder contains Kubernetes configuration files for deploying the Tweet Project application.
 
-## Folder Structure
+## 📁 Folder Structure
 
 - **namespace.yaml**: Defines a Kubernetes namespace for the project.
 
@@ -218,101 +317,57 @@ This folder contains Kubernetes configuration files for deploying the Tweet Proj
 - **mongodb-secret.yaml**: Defines a Kubernetes secret for MongoDB credentials.
 - **mongodb-service.yaml**: Defines a Kubernetes service for the MongoDB database.
 
-## Usage
+## 🚀 Usage
 
 To deploy the Tweet Project application on Kubernetes, follow these steps:
 
 1. Apply the namespace configuration:
 
+```bash
 kubectl apply -f namespace.yaml
+```
 
+Apply the configurations for each component:
 
-2. Apply the configurations for each component:
+    kubectl apply -f analysis/deployment.yaml
+    kubectl apply -f analysis/service.yaml
 
-markdown
+    kubectl apply -f api/deployment.yaml
+    kubectl apply -f api/service.yaml
 
-# Kubernetes Folder
+    kubectl apply -f app/deployment.yaml
+    kubectl apply -f app/service.yaml
 
-This folder contains Kubernetes configuration files for deploying the Tweet Project application.
+    kubectl apply -f db/deployment.yaml
+    kubectl apply -f db/security.yaml
+    kubectl apply -f db/service.yaml
 
-## Folder Structure
+Monitor the deployment:
 
-- **namespace.yaml**: Defines a Kubernetes namespace for the project.
+    kubectl get pods -n tweet-project
 
-### Analysis Folder
+Access the application using the appropriate service endpoints.
 
-- **deployment.yaml**: Defines a Kubernetes deployment for the analysis service.
-- **service.yaml**: Defines a Kubernetes service for the analysis service.
+⚙️ Configuration Details
 
-### API Folder
+    Analysis Deployment: Deploys the analysis service with resource limits and requests.
 
-- **deployment.yaml**: Defines a Kubernetes deployment for the API service.
-- **service.yaml**: Defines a Kubernetes service for the API service.
+    Analysis Service: Exposes the analysis service on port 9000 within the cluster.
 
-### App Folder
+    API Deployment: Deploys the API service with resource limits and requests.
 
-- **deployment.yaml**: Defines a Kubernetes deployment for the main application.
-- **service.yaml**: Defines a Kubernetes service for the main application.
+    API Service: Exposes the API service on port 3000 within the cluster.
 
-### DB Folder
+    App Deployment: Deploys the main application with resource limits and requests.
 
-- **mongodb-statefulset.yaml**: Defines a Kubernetes StatefulSet for the MongoDB database.
-- **mongodb-secret.yaml**: Defines a Kubernetes secret for MongoDB credentials.
-- **mongodb-service.yaml**: Defines a Kubernetes service for the MongoDB database.
+    App Service: Exposes the main application on port 80 within the cluster using a LoadBalancer type service.
 
-## Usage
+    MongoDB StatefulSet: Deploys MongoDB as a StatefulSet with persistent volume claims.
 
-To deploy the Tweet Project application on Kubernetes, follow these steps:
+    MongoDB Secret: Stores MongoDB credentials as a Kubernetes secret.
 
-1. Apply the namespace configuration:
+    MongoDB Service: Exposes MongoDB on port 27017 within the cluster.
 
-kubectl apply -f namespace.yaml
+🗃️ Namespace
 
-markdown
-
-
-2. Apply the configurations for each component:
-
-kubectl apply -f analysis/deployment.yaml
-kubectl apply -f analysis/service.yaml
-
-kubectl apply -f api/deployment.yaml
-kubectl apply -f api/service.yaml
-
-kubectl apply -f app/deployment.yaml
-kubectl apply -f app/service.yaml
-
-kubectl apply -f db/mongodb-statefulset.yaml
-kubectl apply -f db/mongodb-secret.yaml
-kubectl apply -f db/mongodb-service.yaml
-
-
-3. Monitor the deployment:
-
-kubectl get pods -n tweet-project
-
-
-4. Access the application using the appropriate service endpoints.
-
-## Configuration Details
-
-- **Analysis Deployment**: Deploys the analysis service with resource limits and requests.
-- **Analysis Service**: Exposes the analysis service on port 9000 within the cluster.
-
-- **API Deployment**: Deploys the API service with resource limits and requests.
-- **API Service**: Exposes the API service on port 3000 within the cluster.
-
-- **App Deployment**: Deploys the main application with resource limits and requests.
-- **App Service**: Exposes the main application on port 80 within the cluster using a LoadBalancer type service.
-
-- **MongoDB StatefulSet**: Deploys MongoDB as a StatefulSet with persistent volume claims.
-- **MongoDB Secret**: Stores MongoDB credentials as a Kubernetes secret.
-- **MongoDB Service**: Exposes MongoDB on port 27017 within the cluster.
-
-## Namespace
-
-The project components are deployed within the `tweet-project` namespace to isolate them from other resources.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
+The project components are deployed within the tweet-project namespace to isolate them from other resources.
