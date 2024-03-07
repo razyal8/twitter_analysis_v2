@@ -17,6 +17,11 @@ The Tweet Analysis Web Application is a Flask-based web application that allows 
   - [App Folder](#app)
 - [Kubernetes](#kubernetes)
 
+
+![Alt text](images/home-page.png)
+
+![Alt text](images/all-analysis.png)
+
 # Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
