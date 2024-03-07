@@ -6,6 +6,7 @@ The Tweet Analysis Web Application is a Flask-based web application that allows 
 
 ## Roadmap
 
+- [Mockup](#mockup)
 - [Environment Variables](#environment-variables)
 - [run locally](#run-locally)
 - [Deployment](#deployment)
@@ -14,6 +15,8 @@ The Tweet Analysis Web Application is a Flask-based web application that allows 
   - [Api Folder](#api)
   - [App Folder](#app)
 - [Kubernetes](#kubernetes)
+
+## Mockup
 
 ![Alt text](images/home-page.png)
 
