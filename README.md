@@ -70,7 +70,36 @@ Go to the project directory
 
 ## Deployment
 
-To deploy this project run
+To deploy this project to your local kubernetes and run locally you need to:
+
+#### build the images
+
+##### build & push analysis image to docker-desktop
+
+```bash
+docker build -t razyal/analysis:v1.0.0 ./analysis
+
+docker push -t razyal/analysis:v1.0.0
+
+```
+
+##### build api image
+
+```bash
+docker build -t razyal/analysis:v1.0.0 ./api
+
+docker push -t razyal/api:v1.0.0
+
+```
+
+##### build app image
+
+```bash
+docker build -t razyal/analysis:v1.0.0 ./app
+
+docker push -t razyal/app:v1.0.0
+
+```
 
 #### Deploy db
 
@@ -105,6 +134,10 @@ To deploy this project run
 
   kubectl apply -f kubernetes/app/service.yaml
 ```
+
+after the deployments you should get : 
+
+![Screenshot 1](images/deployments.png) ![Screenshot 2](images/pods.png) ![Screenshot 3](images/services.png)
 
 #### RUN local
 
