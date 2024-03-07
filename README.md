@@ -1,13 +1,11 @@
-
 # Twitter_analysis_v2
 
 Final Project - Twitter Insight Engine using Kubernetes
 
-The Tweet Analysis Web Application is a Flask-based web application that allows users to perform various analyses on tweet data. Users can input data, choose analysis options, and visualize the results.
-
-
+The Tweet Analysis Web Application is a Flask-based web application that allows users to perform various analyses on tweet data. Users can input data, choose analysis options, and visualize the results ,also they have the option to tweet their input using the Twitter API .
 
 ## Roadmap
+
 - [Environment Variables](#environment-variables)
 - [run locally](#run-locally)
 - [Deployment](#deployment)
@@ -16,6 +14,10 @@ The Tweet Analysis Web Application is a Flask-based web application that allows 
   - [Api Folder](#api)
   - [App Folder](#app)
 - [Kubernetes](#kubernetes)
+
+![Alt text](images/home-page.png)
+
+![Alt text](images/all-analysis.png)
 
 # Environment Variables
 
@@ -31,6 +33,24 @@ To run this project, you will need to add the following environment variables to
 
 `BEARER_TOKEN`
 
+## Integrated Technologies
+
+[Docker]: https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white
+[Docker-url]: https://www.docker.com
+[Docker Desktop]: https://img.shields.io/badge/Docker%20Desktop-2496ED?style=for-the-badge&logo=docker&logoColor=white
+[Docker Desktop-url]: https://www.docker.com/products/docker-desktop
+[Kubernetes]: https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white
+[Kubernetes-url]: https://kubernetes.io
+[Kubernetes CLI (kubectl)]: https://img.shields.io/badge/Kubernetes%20CLI%20kubectl-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white
+[Kubernetes CLI (kubectl)-url]: https://kubernetes.io/docs/reference/kubectl/overview/
+[MongoDB]: https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white
+[MongoDB-url]: https://www.mongodb.com
+
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com)
+[![Docker Desktop](https://img.shields.io/badge/Docker%20Desktop-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/products/docker-desktop)
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io)
+[![Kubernetes CLI (kubectl)](https://img.shields.io/badge/Kubernetes%20CLI%20kubectl-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/docs/reference/kubectl/overview/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com)
 
 ## Run Locally
 
@@ -48,11 +68,38 @@ Go to the project directory
   cd twitter_analysis_v2
 ```
 
-
 ## Deployment
 
-To deploy this project run
+To deploy this project to your local kubernetes and run locally you need to:
 
+#### build the images
+
+##### build & push analysis image to docker-desktop
+
+```bash
+docker build -t razyal/analysis:v1.0.0 ./analysis
+
+docker push -t razyal/analysis:v1.0.0
+
+```
+
+##### build api image
+
+```bash
+docker build -t razyal/analysis:v1.0.0 ./api
+
+docker push -t razyal/api:v1.0.0
+
+```
+
+##### build app image
+
+```bash
+docker build -t razyal/analysis:v1.0.0 ./app
+
+docker push -t razyal/app:v1.0.0
+
+```
 
 #### Deploy db
 
@@ -74,7 +121,7 @@ To deploy this project run
 
 #### Deploy analysis service
 
-```bash  
+```bash
   kubectl apply -f kubernetes/analysis/deployment.yaml
 
   kubectl apply -f kubernetes/analysis/service.yaml
@@ -88,13 +135,17 @@ To deploy this project run
   kubectl apply -f kubernetes/app/service.yaml
 ```
 
+after the deployments you should get : 
+
+![Screenshot 1](images/deployments.png) ![Screenshot 2](images/pods.png) ![Screenshot 3](images/services.png)
+
 #### RUN local
+
 ```bash
   kubectl port-forward -n tweet-project service/myapp-service 5000:80
 ```
 
 ### localhost:5000
-
 
 # services
 
@@ -111,7 +162,6 @@ This repository contains scripts for analyzing Twitter data stored in MongoDB. T
 - **database.py**: Script for interacting with MongoDB.
 - **tweet_analysis.py**: Script for performing tweet analysis.
 - **README.md**: This file, providing an overview of the repository.
-
 
 💻 Data Processing and Analysis
 
@@ -155,12 +205,9 @@ Once the server is running, you can access the following endpoints:
   GET /analysis-by-input
 ```
 
-| Parameter    |  Type     | Description          |
-| :--------    | :-------  | :--------------------|
-| `input_text` | `string`  | **Required**.        |
-
-
-
+| Parameter    | Type     | Description   |
+| :----------- | :------- | :------------ |
+| `input_text` | `string` | **Required**. |
 
 # API
 
@@ -208,10 +255,9 @@ To run the Flask API, you can use Docker. Make sure you have Docker installed on
   POST /tweet
 ```
 
-| Parameter  |  Type     | Description          |
-| :--------  | :-------  | :--------------------|
-| `payload`  | `object`  | **Required**.        |
-
+| Parameter | Type     | Description   |
+| :-------- | :------- | :------------ |
+| `payload` | `object` | **Required**. |
 
 ## Authorization
 
@@ -223,7 +269,6 @@ The API uses OAuth1 authentication to interact with the Twitter API. You need to
 - Access Token Secret (`ACCESS_TOKEN_SECRET`)
 
 Make sure to keep your credentials secure and avoid exposing them publicly.
-
 
 # App
 
@@ -254,10 +299,9 @@ To run the Flask application, follow these steps:
     3. Build the Docker image using the following command:
 
     docker build -t flask-app .
-    
+
     4. Once the image is built, you can run the Docker container using:
     5. The Flask application will be accessible at `http://localhost:5000`.
-
 
 ## Endpoints
 
@@ -285,8 +329,7 @@ The `static/` directory contains CSS files for styling the HTML templates.
 
 The `app.py` script contains the Flask application logic for handling requests and rendering templates.
 
-
-----------------------------------------------------------------------
+---
 
 # Kubernetes
 
