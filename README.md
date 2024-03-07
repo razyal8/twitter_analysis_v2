@@ -2,7 +2,7 @@
 
 Final Project - Twitter Insight Engine using Kubernetes
 
-The Tweet Analysis Web Application is a Flask-based web application that allows users to perform various analyses on tweet data. Users can input data, choose analysis options, and visualize the results.
+The Tweet Analysis Web Application is a Flask-based web application that allows users to perform various analyses on tweet data. Users can input data, choose analysis options, and visualize the results ,also they have the option to tweet their input using the Twitter API .
 
 ## Roadmap
 
